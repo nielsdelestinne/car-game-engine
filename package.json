@@ -16,5 +16,8 @@
     "typescript": "^3.1.6",
     "webpack": "^4.24.0",
     "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "rxjs": "^6.3.3"
   }
 }
