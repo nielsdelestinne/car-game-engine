@@ -50,15 +50,14 @@ export default class Car implements Drawable {
 
         const keyPresses = merge(keyDowns, keyUps)
             .pipe(
-                tap((e: KeyboardEvent) => console.log(e.code)),
                 filter((e: KeyboardEvent) => e.code === 'ArrowUp'
                     || e.code === 'ArrowRight'
                     || e.code === 'ArrowDown'
                     || e.code === 'ArrowLeft'
-                    || e.code === 'Space'));
+                    || e.code === 'Space')
+            );
 
         keyPresses.subscribe((event: KeyboardEvent) => {
-            console.log(event);
             switch (event.code) {
                 case 'ArrowUp':
                     this.isKeyUpPressed = event.type === 'keydown';
