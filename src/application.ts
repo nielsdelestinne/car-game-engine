@@ -1,12 +1,21 @@
-import CanvasWindow from "./canvasWindow";
+import DrawingEngine from "./drawingEngine";
 
 class Application {
 
-    public static launch(): HTMLCanvasElement  {
-        const canvasWindow = new CanvasWindow('mainCanvas', 350, 150);
-        return canvasWindow.drawCanvas();
+    private static readonly INTERVAL_IN_MSEC = 10   ;
+    private drawingEngine: DrawingEngine;
+
+    constructor() {
+        this.drawingEngine = new DrawingEngine('mainCanvas', 800, 800);
     }
 
+    get canvasElement(): HTMLCanvasElement {
+        return this.drawingEngine.draw();
+    }
+
+    public redraw() {
+        setInterval(() => this.drawingEngine.draw(), Application.INTERVAL_IN_MSEC);
+    }
 }
 
 /**
@@ -14,4 +23,6 @@ class Application {
  * Launch the application
  * ----------------------
  */
-document.body.appendChild(Application.launch());
+const application = new Application();
+document.body.appendChild(application.canvasElement);
+application.redraw();
