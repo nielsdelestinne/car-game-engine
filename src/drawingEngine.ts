@@ -11,13 +11,16 @@ export default class DrawingEngine {
     private _context: CanvasRenderingContext2D;
     private readonly drawables: Drawable[];
     private readonly collisionBodies: CollisionBody[];
+    private collisionTimeout = false;
 
     constructor(private id: string, private _width: number, private _height: number) {
         this.createCanvasElement();
         const objects: any = [
             new Car(),
-            new Obstruct(new Point(50, 200), new Point(250, 210), 'green'),
-            new Obstruct(new Point(50, 220), new Point(40, 250), 'blue'),
+            new Obstruct(new Point(150, 200), new Point(350, 210), 'green'),
+            new Obstruct(new Point(360, 220), new Point(450, 250), 'green'),
+            new Obstruct(new Point(460, 270), new Point(452, 500), 'green'),
+            new Obstruct(new Point(150, 300), new Point(350, 300), 'green'),
         ];
         this.drawables = objects;
         this.collisionBodies = objects;
@@ -69,20 +72,16 @@ export default class DrawingEngine {
     // Forget about this... https://stackoverflow.com/questions/20916953/get-distance-between-two-points-in-canvas
     // https://math.stackexchange.com/questions/143932/calculate-point-given-x-y-angle-and-distance
     performCollisionDetection(collisionBody1: CollisionBody, collisionBody2: CollisionBody): void {
-
         for (let cbLine1 of collisionBody1.body) {
             for (let cbLine2 of collisionBody2.body) {
-
-                const isCollided = this.isCollisionDetected(cbLine1, cbLine2);
-
-                if (isCollided) {
-                    console.log("HIT");
-                    // this.velocityX = this.velocityX * -1.3;
-                    // this.velocityY = this.velocityY * -1.3;
+                if (!this.collisionTimeout && this.isCollisionDetected(cbLine1, cbLine2)) {
+                    collisionBody1.isHit();
+                    collisionBody2.isHit();
+                    this.collisionTimeout = true;
+                    setTimeout(() =>{this.collisionTimeout = false}, 100);
                 }
             }
         }
-
     }
 
     // http://www.jeffreythompson.org/collision-detection/line-line.php

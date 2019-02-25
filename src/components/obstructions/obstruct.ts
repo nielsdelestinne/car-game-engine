@@ -6,11 +6,14 @@ import {CollisionBody} from "../collisionbody";
 export class Obstruct implements Drawable, CollisionBody {
 
     private readonly line: Line;
-    private readonly color: string;
+    private color: string;
+    private originalColor: string;
+    private wasHit: boolean;
 
     constructor(from: Point, to: Point, color: string) {
         this.line = new Line(from, to);
         this.color = color;
+        this.originalColor = color;
     }
 
     draw(context: CanvasRenderingContext2D): void {
@@ -22,10 +25,16 @@ export class Obstruct implements Drawable, CollisionBody {
         context.lineWidth = 5;
         context.stroke();
         context.restore();
+        this.wasHit = false;
     }
 
     get body(): Line[] {
         return [this.line];
+    }
+
+    isHit(): void {
+        setTimeout(() =>{this.color = this.originalColor}, 500);
+        this.color = 'red';
     }
 
 }

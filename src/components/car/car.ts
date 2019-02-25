@@ -41,6 +41,12 @@ export default class Car implements Drawable, CollisionBody {
         this._body = this.calculateBody();
     }
 
+    isHit(): void {
+        this.velocityX = this.velocityX * -1.1;
+        this.velocityY = this.velocityY * -1.1;
+        this.angle += Math.PI;
+    }
+
     draw(context: CanvasRenderingContext2D): void {
 
         this.context = context;
@@ -77,6 +83,7 @@ export default class Car implements Drawable, CollisionBody {
         this.context.moveTo(this._positionX, this._positionY);
         this.context.lineTo(this._positionX + this.width, this._positionY);
         this.context.strokeStyle = 'yellow';
+        this.context.lineWidth = 5;
         this.context.stroke();
         this.context.restore();
     }
