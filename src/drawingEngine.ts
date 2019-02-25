@@ -1,31 +1,21 @@
 import Drawable from "./components/drawable";
-import Soldier from "./components/soldier/soldier";
-import BoundedSoldier from "./components/soldier/boundedSoldier";
 import Car from "./components/car/car";
 
 export default class DrawingEngine {
 
     private canvas: HTMLCanvasElement;
     private _context: CanvasRenderingContext2D;
-    private drawables: Drawable[];
+    private readonly drawables: Drawable[];
 
     constructor(private id: string, private _width: number, private _height: number) {
         this.createCanvasElement();
         this.drawables = [
             new Car()
-            // new BoundedSoldier(new Soldier(180, 40, 'orange', -1, 0)),
-            // new BoundedSoldier(new Soldier(20, 40, 'blue', 1, 0)),
-            // new BoundedSoldier(new Soldier(500, 40, 'green', -1, 0)),
-            // new BoundedSoldier(new Soldier(130, 60, 'black', -1, -1)),
-            // new BoundedSoldier(new Soldier(150, 10, 'white', -1, 1)),
-            // new BoundedSoldier(new Soldier(170, 80, 'purple', 1, 1)),
-            // new BoundedSoldier(new Soldier(190, 100, 'yellow', -1, -1)),
         ];
     }
 
     public draw(): HTMLCanvasElement {
         this.drawCanvas();
-        this.performCollisionDetection();
         this.drawDrawables();
         return this.canvas;
     }
@@ -42,28 +32,9 @@ export default class DrawingEngine {
         return this._height;
     }
 
-    private performCollisionDetection() {
-        for (let drawable of this.drawables) {
-            for (let index = 1; index < this.drawables.length; index++) {
-                if (drawable === this.drawables[index] && (
-                     drawable.positionX + Soldier.WIDTH < this.drawables[index].positionX
-                    || drawable.positionX > this.drawables[index].positionX + Soldier.WIDTH
-                    || drawable.positionY + Soldier.HEIGHT < this.drawables[index].positionY
-                    || drawable.positionY > this.drawables[index].positionY + Soldier.HEIGHT)) {
-                    console.log("no hit");
-                } else {
-                    console.log("jahahaha");
-                    let soldier = this.drawables[index] as BoundedSoldier;
-                    soldier.inverseVelocityY();
-                    soldier.inverseVelocityX();
-                }
-            }
-        }
-    }
-
     private drawDrawables() {
         for (let drawable of this.drawables) {
-            drawable.draw(this);
+            drawable.draw(this.context);
         }
     }
 
